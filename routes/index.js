@@ -14,7 +14,9 @@ var gfs;
 var Grid=require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
 
+//Database Models
 var User= require('../models/user');
+var Profile= require('../models/profile');
 
 var postDataSchema=new Schema({
     title:{type:String,require:true},
@@ -53,6 +55,19 @@ router.post('/insert',function (req,res,next){
 });
 
 router.post('/create-post',function (req,res,next){
+  var post={
+    title:req.body.title,
+    data:req.body.data,
+    author:req.body.author
+    };
+    var data=new Post(post);
+    if(data.save()){
+      console.error('Created');
+    }
+    res.redirect('/posts');
+});
+
+router.post('/create-profile',function (req,res,next){
   var post={
     title:req.body.title,
     data:req.body.data,
@@ -188,8 +203,8 @@ router.get('/signup', function(req, res, next) {
   res.render('signup',{title: 'Sign Up',layout: 'layout.hbs'});
 });
 
-router.get('/userprofile/:id', function(req, res, next) {
-  res.render('user/userprofile',{title: 'User Profile',layout: 'dash.hbs'});
+router.get('/userprofile', function(req, res, next) {
+  res.render('users/userprofile',{title: 'User Profile',session:req.session.user,layout:'dash.hbs'});
 });
 
 router.post('/update',function (req,res,next){

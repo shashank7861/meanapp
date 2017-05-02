@@ -1,0 +1,58 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8&appId=284436565321204";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<h1>{{title}}</h1>
+<div style="float:right">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postModal">
+    Create post
+  </button>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h3>User Posts</h3><label style="float:right" class="label label-warning" id="lbl">{{msg}}</label>
+    <table class="table table-hover table-bordered" width="100%">
+      <tr><th>Title</th><th>Data</th><th>Author</th><th>Date</th><th>Published</th><th>Delete</th><th>Social</th></tr>
+      {{# each post}}
+      <tr>
+        <td>{{this.title}}</td><td>{{this.data}}</td><td>{{this.author}}</td><td>{{this.createdAt}}</td><td>{{this.published}}</td><td><a href="/delete-post/{{this.id}}"><button id="del" class="btn btn-danger">Delete</button</a></td><td><div class="fb-like" data-href="http://localhost:3000/posts/" data-layout="box_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></td>
+      </tr>
+      {{/each}}
+    </table>
+  </div>
+</div>
+<!-- User Post Creation Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create Post</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form" action="/create-post" method="post">
+            <div class="form-group">
+                Author<input class="form-control" readonly type="text" id="author" value="{{session.name}}" name="author">
+            </div>
+            <div class="form-group">
+                Title<input class="form-control" type="text" id="name" name="title">
+            </div>
+            <div class="form-group">
+                Post Content<textarea class="form-control" type="text" id="data" name="data"></textarea>
+            </div>
+            <button class="btn btn-success" type="submit">Create Post</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" language="javascript">
+  $("#lbl").delay(1000).fadeOut(100);
+</script>

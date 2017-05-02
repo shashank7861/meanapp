@@ -1,0 +1,38 @@
+<div class="container">
+  <h1>Sign Up</h1>
+    <div class="row well">
+      <div class="col-md-6">
+        <h3>Sign up using</h3>
+        <a href="/auth/facebook"><button class="btn btn-lg btn-primary"><i class="fa fa-facebook fa-3x"> </i></button></a>
+        <a href="auth-gl"><button class="btn btn-lg btn-danger"><i class="fa fa-google fa-3x"></i></button></a>
+        <a href="auth-tw"><button class="btn btn-lg btn-primary"><i class="fa fa-twitter fa-3x"> </i></button></a>
+      </div>
+      <div class="col-md-6">
+        <h3>Register using your E-mail</h3>
+        <form class="form" action="/insert" method="post">
+            <div class="form-group">
+              <label class="label label-warning" id="lbl">{{msg}}</label>
+            </div>
+            <div class="form-group">
+                Name<input class="form-control" required type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                Email<input class="form-control" type="email" id="email" required name="email">
+            </div>
+            <div class="form-group">
+                Contact<input class="form-control" type="text" id="contact" required name="contact">
+            </div>
+            <div class="form-group">
+                Password<input class="form-control" type="password" id="passwd" required name="passwd">
+            </div>
+            <div class="form-group">
+                Confirm Password<input class="form-control" type="password" id="cpasswd" required name="cpasswd">
+            </div>
+            <button class="btn btn-success" type="submit">Sign up</button>
+        </form>
+      </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $("#lbl").delay(1000).fadeOut(100);
+</script>

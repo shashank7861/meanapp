@@ -68,16 +68,20 @@ router.post('/create-post',function (req,res,next){
 });
 
 router.post('/create-profile',function (req,res,next){
-  var post={
-    title:req.body.title,
-    data:req.body.data,
-    author:req.body.author
+  var profile={
+    address:req.body.address,
+    city:req.body.city,
+    state:req.body.state,
+    country:req.body.country,
+    pin:req.body.pin,
+    id:req.session.user.id
     };
-    var data=new Post(post);
+    console.log(req.session.user.id);
+    var data=new Profile(profile);
     if(data.save()){
       console.error('Created');
     }
-    res.redirect('/posts');
+    res.redirect('/userprofile');
 });
 
     conn.once("open", function(){
@@ -85,19 +89,19 @@ router.post('/create-profile',function (req,res,next){
     //second parameter is multer middleware.
     router.post("/upload-img", upload.single("data"), function(req, res, next){
       //create a gridfs-stream into which we pipe multer's temporary file saved in uploads. After which we delete multer's temp file.
-    
+
     var writestream = gfs.createWriteStream({
       filename: req.file.originalname
     });
     //
     //pipe multer's temp file /uploads/filename into the stream we created above. On end deletes the temporary file.
     console.log('cp3');
-    
+
     fs.createReadStream("../public/uploads/" + req.file.filename)
       .on("end", function(){fs.unlink("../public/uploads/"+ req.file.filename, function(err){res.send("success")})})
       .on("err", function(){res.send("Error uploading image")})
           .pipe(writestream);
-    console.log('cp4');      
+    console.log('cp4');
   });
 
   // sends the image we saved by filename.
@@ -140,7 +144,7 @@ router.post('/fn_login',function(req,res){
       }
       else{
         req.session.user=user;
-        console.log(req.session.user);
+        console.log(req.session.user.id);
         res.redirect('/dashboard');
         console.log("go");
       }
@@ -151,6 +155,12 @@ router.get('/', function(req, res, next) {
   Post.find()
   .then(function(doc){
   res.render('index',{ title: 'Home' ,layout: 'layout.hbs',post:doc});
+});
+
+router.get('/dbdata', function(req, res, next) {
+  console.log('data');
+  //var data=db.users.find().pretty();
+  //res.render('test',{ title: 'Data',layout: 'layout.hbs'});
 });
 
 });router.get('/post-image', function(req, res, next) {
@@ -204,7 +214,11 @@ router.get('/signup', function(req, res, next) {
 });
 
 router.get('/userprofile', function(req, res, next) {
-  res.render('users/userprofile',{title: 'User Profile',session:req.session.user,layout:'dash.hbs'});
+  console.log(req.session.user.id);
+  var id=req.params.id;
+  Profile.findById(id, function(err,doc){
+    res.render('users/userprofile',{title: 'User Profile',session:req.session.user,layout:'dash.hbs'});
+  });
 });
 
 router.post('/update',function (req,res,next){

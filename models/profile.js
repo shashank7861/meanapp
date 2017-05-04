@@ -6,8 +6,9 @@ var ProfileSchema = new Schema({
   address:{type:String,require:true},
   city:{type:String,require:true},
   state:{type:String,require:true},
-  country:{type:String,default:'u'},
-  pin:{type:Number,require:true}
+  country:{type:String,require:true},
+  pin:{type:Number,require:true},
+  user:{type:String,require:true}
 });
 
 module.exports=mongoose.model('Profile',ProfileSchema);

@@ -64,23 +64,39 @@ router.post('/create-post',function (req,res,next){
     if(data.save()){
       console.error('Created');
     }
-    res.redirect('/posts');
+    res.render('system/posts',{title: 'Posts',session:req.session.user,post:doc,layout: 'dash.hbs'});
 });
 
-router.post('/create-profile',function (req,res,next){
+router.post('/create-profile/:userid',function (req,res,next){
+  var userid=req.params.userid;
   var profile={
     address:req.body.address,
     city:req.body.city,
     state:req.body.state,
     country:req.body.country,
     pin:req.body.pin,
-    id:req.session.user.id
+    user:userid
     };
-    console.log(req.session.user.id);
-    var data=new Profile(profile);
-    if(data.save()){
-      console.error('Created');
+    console.log(profile);
+    Profile.findOne({'user': userid}, function(err,data){
+    if(data){
+      console.log('profile already exists');
+      data.address=req.body.address;
+      data.city=req.body.city;
+      data.state=req.body.state;
+      data.country=req.body.country;
+      data.pin=req.body.pin;
+      data.save();
+      console.log('Profile Updated');
     }
+    else{
+      console.log(profile);
+      var data=new Profile(profile);
+      if(data.save()){
+        console.error('Created');
+      }
+    }
+    });
     res.redirect('/userprofile');
 });
 
@@ -157,10 +173,10 @@ router.get('/', function(req, res, next) {
   res.render('index',{ title: 'Home' ,layout: 'layout.hbs',post:doc});
 });
 
-router.get('/dbdata', function(req, res, next) {
+router.get('/mongo-data', function(req, res, next) {
   console.log('data');
   //var data=db.users.find().pretty();
-  //res.render('test',{ title: 'Data',layout: 'layout.hbs'});
+  res.render('test',{ title: 'Data',layout: 'layout.hbs'});
 });
 
 });router.get('/post-image', function(req, res, next) {
@@ -219,7 +235,7 @@ router.get('/signin', function(req, res, next) {
 router.get('/updateuser/:id', function(req, res, next) {
   var id=req.params.id;
   User.findById(id, function(err,doc){
-    res.render('system/update-user',{title: 'Users',user:doc,id:id ,layout: 'dash.hbs'});
+    res.render('system/update-user',{title: 'Users',user:doc,id:id ,layout: 'dash.hbs',session:req.session.user});
   });
 });
 
@@ -236,13 +252,12 @@ router.get('/signup', function(req, res, next) {
   res.render('signup',{title: 'Sign Up',layout: 'layout.hbs'});
 });
 
-router.get('/userprofile/:id', function(req, res, next) {
-  var id=req.params.id;
-  console.log(id);
-  Profile.findById(id, function(err,profile){
-    console.log(Profile.address);
+router.get('/userprofile', function(req, res, next) {
+    var userid=req.session.user._id;
+    console.log(userid);
+    Profile.findOne({'user': userid}, function(err,profile){
     res.render('users/userprofile',{title: 'User Profile',session:req.session.user,profile:profile,layout:'dash.hbs'});
-  });
+    });
 });
 
 router.post('/update',function (req,res,next){
@@ -268,8 +283,11 @@ router.get('/delete/:id',function (req,res,next){
 router.get('/delete-post/:id',function (req,res,next){
   var id=req.params.id;
   Post.findByIdAndRemove(id).exec();
-  res.redirect('/posts');
-});
+  User.find()
+      .then(function(doc){
+      res.render('system/posts',{title: 'Posts',session:req.session.user,post:doc,layout: 'dash.hbs'});
+  });
+});      
 
 router.get('/logout',function (req,res,next){
   req.session.user="";

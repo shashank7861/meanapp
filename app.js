@@ -13,8 +13,11 @@ var hbs=require('express-handlebars');
 var expressValidator=require('express-validator');
 var session=require('express-session');
 var index = require('./routes/index');
+const multer = require('multer');
 var app = express();
+var upload = multer({ dest: 'uploads/' })
 
+const upload = multer({ dest: path.join(__dirname, 'uploads') });
 app.engine('hbs',hbs({extname:'hbs',defaultlayout:'layout',layoutsDir:__dirname+'/views/layouts'}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

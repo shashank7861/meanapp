@@ -198,6 +198,15 @@ router.get('/post-image', function(req, res, next) {
 });
 });
 
+router.post('/fileupload', function(req, res, next) {
+  console.log('uploading....');
+  res.render('system/fileupload',{title: 'File Upload',session:req.session.user,layout: 'dash.hbs'});
+});
+
+router.get('/fileupload', function(req, res, next) {
+  res.render('system/fileupload',{title: 'File Upload',session:req.session.user,layout: 'dash.hbs'});
+});
+
 router.get('/c_db', function(req, res, next) {
   Post.find()
     .then(function(doc){

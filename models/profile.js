@@ -10,7 +10,6 @@ var ProfileSchema = new Schema({
   pin:{type:Number,require:true},
   user:{type:String,require:true},
   createdAt:{type:Date,default:Date.now},
-  updatedAt: new Date()
 });
 
 module.exports=mongoose.model('Profile',ProfileSchema);

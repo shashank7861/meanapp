@@ -10,6 +10,3 @@ var PostSchema = new Schema({
   meta{
     likes:Number
   }
-});
-
-module.exports=mongoose.model('Post',PostSchema);

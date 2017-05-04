@@ -64,7 +64,10 @@ router.post('/create-post',function (req,res,next){
     if(data.save()){
       console.error('Created');
     }
+    Post.find()
+    .then(function(doc){
     res.render('system/posts',{title: 'Posts',session:req.session.user,post:doc,layout: 'dash.hbs'});
+  });
 });
 
 router.post('/create-profile/:userid',function (req,res,next){
@@ -121,7 +124,7 @@ router.post('/create-profile/:userid',function (req,res,next){
   });
 
   // sends the image we saved by filename.
-  router.get("/:filename", function(req, res){
+  /*router.get("/:filename", function(req, res){
       var readstream = gfs.createReadStream({filename: req.params.filename});
       readstream.on("error", function(err){
         res.send("No image found with that title");
@@ -142,7 +145,7 @@ router.post('/create-profile/:userid',function (req,res,next){
         res.send("No image found with that title");
       }
     });
-  });
+  });*/
 });
 
 
@@ -173,17 +176,33 @@ router.get('/', function(req, res, next) {
   res.render('index',{ title: 'Home' ,layout: 'layout.hbs',post:doc});
 });
 
-router.get('/mongo-data', function(req, res, next) {
-  console.log('data');
-  //var data=db.users.find().pretty();
-  res.render('test',{ title: 'Data',layout: 'layout.hbs'});
+router.get('/vehicle', function(req, res, next) {
+  if(!req.session.user)
+  {
+    res.render('signin',{title: 'Log In',msg:'Please Sign in to continue...' ,layout: 'layout.hbs'});
+  }
+  else
+  {
+    Post.find()
+    .then(function(doc){
+    res.render('users/vehicle',{title: 'Vehicles',session:req.session.user,post:doc,layout: 'dash.hbs'});
+  })
+}
+});
 });
 
-});router.get('/post-image', function(req, res, next) {
+router.get('/post-image', function(req, res, next) {
   Post.find()
   .then(function(doc){
   res.render('system/upload-image',{ title: 'Post' ,layout: 'dash.hbs',post:doc});
 });
+});
+
+router.get('/c_db', function(req, res, next) {
+  Post.find()
+    .then(function(doc){
+    res.render('dbdata',{title: 'DataBase',session:req.session.user,post:doc,layout: 'layout.hbs'});
+  })
 });
 
 router.get('/posts', function(req, res, next) {
@@ -283,9 +302,9 @@ router.get('/delete/:id',function (req,res,next){
 router.get('/delete-post/:id',function (req,res,next){
   var id=req.params.id;
   Post.findByIdAndRemove(id).exec();
-  User.find()
-      .then(function(doc){
-      res.render('system/posts',{title: 'Posts',session:req.session.user,post:doc,layout: 'dash.hbs'});
+  Post.find()
+    .then(function(doc){
+    res.render('system/posts',{title: 'Posts',session:req.session.user,post:doc,layout: 'dash.hbs'});
   });
 });      
 

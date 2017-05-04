@@ -144,7 +144,7 @@ router.post('/fn_login',function(req,res){
       }
       else{
         req.session.user=user;
-        console.log(req.session.user.id);
+        console.log(req.session.user);
         res.redirect('/dashboard');
         console.log("go");
       }
@@ -197,6 +197,20 @@ router.get('/users', function(req, res, next) {
   }
 });
 
+router.get('/vehicle', function(req, res, next) {
+  if(!req.session.user)
+  {
+    res.render('signin',{title: 'Log In',msg:'Please Sign in to continue...' ,layout: 'layout.hbs'});
+  }
+  else
+  {
+    Post.find()
+    .then(function(doc){
+    res.render('users/vehicle',{title: 'Vehicles',session:req.session.user,post:doc,layout: 'dash.hbs'});
+  })
+}
+});
+
 router.get('/signin', function(req, res, next) {
   res.render('signin',{ title: 'Sign In',msg: msg ,layout: 'layout.hbs'});
 });
@@ -209,15 +223,25 @@ router.get('/updateuser/:id', function(req, res, next) {
   });
 });
 
+router.get('/qr/:id', function(req, res, next) {
+  var id=req.params.id;
+  User.findById(id, function(err,userqr){
+    var datatoshow=('Name :'+userqr.name+', Email:'+userqr.email+', Contact:'+userqr.contact);
+    console.log(datatoshow);
+    res.redirect('https://api.qrserver.com/v1/create-qr-code/?size=750x750&data='+datatoshow);
+  });
+});
+
 router.get('/signup', function(req, res, next) {
   res.render('signup',{title: 'Sign Up',layout: 'layout.hbs'});
 });
 
-router.get('/userprofile', function(req, res, next) {
-  console.log(req.session.user.id);
+router.get('/userprofile/:id', function(req, res, next) {
   var id=req.params.id;
-  Profile.findById(id, function(err,doc){
-    res.render('users/userprofile',{title: 'User Profile',session:req.session.user,layout:'dash.hbs'});
+  console.log(id);
+  Profile.findById(id, function(err,profile){
+    console.log(Profile.address);
+    res.render('users/userprofile',{title: 'User Profile',session:req.session.user,profile:profile,layout:'dash.hbs'});
   });
 });
 
@@ -259,7 +283,7 @@ router.get('/dashboard',function (req,res,next){
     res.render('signin',{title: 'Log In',msg:'Please Sign in to continue...' ,layout: 'layout.hbs'});
   }
   else{
-    res.render('system/dashboard',{ title: 'Dashboard',session:req.session.user ,layout: 'dash.hbs'});
+    res.render('system/dashboard',{ title: 'Dashboard',session:req.session.user,layout: 'dash.hbs'});
     console.error('welcomeeee')
   }
 });

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -46,8 +47,9 @@
           <li role="presentation" class="active"><a href="/dashboard"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Dashboard</a></li>
           <li role="presentation" class="active"><a href="/posts"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Posts</a></li>
           <li role="presentation" class="active"><a href="/users"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Users</a></li>
-          <li role="presentation" class="active"><a href="/userprofile"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profile</a></li>
-          <li role="presentation" class="active"><a href="/post-image">Post Image</a></li>
+          <li role="presentation" class="active"><a href="/userprofile/{{session._id}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profile</a></li>
+          <li role="presentation" class="active"><a href="/vehicle">Vehicles</a></li>
+          <li role="presentation" class="active"><a href="/qr/{{session._id}}" target="_blank">QR</a></li>
         </ul>
       </div>
       <div class="col-md-10">
@@ -56,7 +58,7 @@
     </div>
   </div>
       <hr class="featurette-divider">
-      
+
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </body>
 </html>

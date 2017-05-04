@@ -1,7 +1,6 @@
-<div class="container">
-  <h1>{{ title }}</h1>
+<h1>{{ title }}</h1>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-lg-12">
         <h3>Basic Information</h3>
         <hr>
         <div class="row">
@@ -12,12 +11,12 @@
           </div>
           <div class="col-lg-6">
             <div class="form-group">
-                Contact<label class="form-control" type="text" id="name" value="" name="name">{{session.contact}}</label>
+                Contact<label class="form-control" type="text" id="contact" value="" name="contact">{{session.contact}}</label>
             </div>
           </div>
         </div>
         <div class="form-group">
-            Email<label class="form-control" type="text" id="name" value="" name="name">{{session.email}}</label>
+            Email<label class="form-control" type="text" id="email" value="" name="email">{{session.email}}</label>
         </div>
         <form class="form" action="/create-profile" method="post">
           <h3>Personal Details</h3>
@@ -25,15 +24,15 @@
           <div class="row">
             <div class="col-lg-6">
               <div class="form-group">
-                  Address<textarea class="form-control" id="address" name="address" cols="2" rows="5"></textarea>
+                  Address<textarea class="form-control" id="address" name="address" cols="2" rows="5">{{profile.address}}</textarea>
               </div>
             </div>
             <div class="col-lg-6">
               <div class="form-group">
-                  City<input class="form-control" id="contact" name="city" cols="2" rows="5">
+                  City<input class="form-control" id="city" name="city" cols="2" rows="5">
               </div>
               <div class="form-group">
-                  State<input class="form-control" id="contact" name="state" cols="2" rows="5">
+                  State<input class="form-control" id="state" name="state" cols="2" rows="5">
               </div>
             </div>
           </div>
@@ -52,6 +51,4 @@
           <button class="btn btn-success" type="submit">Update</button>
         </form>
       </div>
-
     </div>
-</div>

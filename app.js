@@ -15,7 +15,6 @@ var session=require('express-session');
 var index = require('./routes/index');
 const multer = require('multer');
 var app = express();
-var upload = multer({ dest: 'uploads/' })
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 app.engine('hbs',hbs({extname:'hbs',defaultlayout:'layout',layoutsDir:__dirname+'/views/layouts'}));

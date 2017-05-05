@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var assert = require('assert');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 var multer = require("multer");
 var upload =multer({dest: "../public/uploads"});
 mongoose.connect('localhost:27017/proj')
@@ -198,9 +199,10 @@ router.get('/post-image', function(req, res, next) {
 });
 });
 
-router.post('/fileupload', function(req, res, next) {
-  console.log('uploading....');
-  res.render('system/fileupload',{title: 'File Upload',session:req.session.user,layout: 'dash.hbs'});
+router.post('/fileupload', multer({ dest: './uploads/'}).single('upl'), function(req,res){
+  console.log(req.body); //form fields
+  console.log(req.file); //form files
+  res.status(204).end();
 });
 
 router.get('/fileupload', function(req, res, next) {

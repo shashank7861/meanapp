@@ -66,4 +66,29 @@
         </div>
       </div>
     </div>
+  </div>  
+    <div class="row">
+      <div id="maps" class="col-lg-6" style="height:400px"></div>
+      <div id="pano" class="col-lg-6" style="height:400px"></div>
+    </div>  
+    <script>
+      function initialize() {
+        var fenway = {lat: 28.7041, lng: 77.1025};
+        var map = new google.maps.Map(document.getElementById('maps'), {
+          center: fenway,
+          zoom: 16
+        });
+        var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), {
+              position: fenway,
+              pov: {
+                heading: 34,
+                pitch: 10
+              }
+            });
+        map.setStreetView(panorama);
+      }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuRto48-6LVkuFIuO-e9PU0iN6nJ0VEWo&callback=initialize"></script>
 </div>

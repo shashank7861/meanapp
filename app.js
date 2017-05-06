@@ -31,16 +31,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret:"mysession@123",saveUninitialized:true, resave:false}));
 app.use('/', index);
+
 app.use(passport.initialize());
 app.use(passport.session());
-/*function _initalizeModels(){
-  mongoose.connect(config.db);
-  mongoose.connection.on('error',function(err){
-    console.log('failed to connect',{err:err});
-  })
-}
-_initalizeModels();
-*/
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -65,6 +59,8 @@ app.use(expressValidator({
     };
   }
 }));
+
+
 
 // error handler
 app.use(function(err, req, res, next) {

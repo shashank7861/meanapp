@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "alertifyjs": "^1.10.0",
     "body-parser": "~1.16.0",
     "busboy-body-parser": "^0.3.0",
     "cookie-parser": "~1.4.3",

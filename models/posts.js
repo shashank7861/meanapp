@@ -6,7 +6,7 @@ var PostSchema = new Schema({
   body:{type:String,require:true,},
   createdAt:{type:Date,default:Date.now},
   author:String;
-  published:{type:Boolean,default:false},
+  read:{type:Boolean,default:false},
   meta{
     likes:Number
   }

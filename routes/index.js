@@ -7,13 +7,12 @@ var multer = require("multer");
 var upload =multer({dest: "../public/uploads"});
 mongoose.connect('localhost:27017/proj')
 var conn = mongoose.connection;
+var passport = require('passport');
+
 //mongoose.connect('mongodb://admin:admin@ds137090.mlab.com:37090/mymeandb')
 var Schema=mongoose.Schema;
 var session;
 var msg;
-var gfs;
-var Grid=require('gridfs-stream');
-Grid.mongo = mongoose.mongo;
 
 //Database Models
 var User= require('../models/user');
@@ -28,6 +27,39 @@ var postDataSchema=new Schema({
 },{collection:'postdata'});
 
 var Post=mongoose.model('postdata',postDataSchema);
+
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './public/uploads');
+  },
+  filename: function (req, file, callback) {
+    callback(null, req.session.user._id );
+  }
+});
+
+var upload = multer({ storage : storage}).single('pic');
+
+router.get('/auth/facebook', passport.authenticate('facebook'));
+
+router.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { 
+    successRedirect: '/',
+    failureRedirect: '/login' }));
+
+router.post('/fileupload',function(req,res){
+    upload(req,res,function(err) {
+        if(err) {
+          console.log("Error uploading file.");
+          msg='Error in uploading file';
+          res.render('system/fileupload',{title: 'File Upload',msg:msg,session:req.session.user,layout: 'dash.hbs'});
+        }
+        else{
+          console.log("File Uploaded");
+          msg='File uploaded';
+          res.render('system/fileupload',{title: 'File Upload',session:req.session.user,msg:msg,layout: 'dash.hbs'});
+        }
+    });
+});
 
 router.post('/insert',function (req,res,next){
   var user={
@@ -104,52 +136,6 @@ router.post('/create-profile/:userid',function (req,res,next){
     res.redirect('/userprofile');
 });
 
-    conn.once("open", function(){
-    gfs = Grid(conn.db);
-    //second parameter is multer middleware.
-    router.post("/upload-img", upload.single("data"), function(req, res, next){
-      //create a gridfs-stream into which we pipe multer's temporary file saved in uploads. After which we delete multer's temp file.
-
-    var writestream = gfs.createWriteStream({
-      filename: req.file.originalname
-    });
-    //
-    //pipe multer's temp file /uploads/filename into the stream we created above. On end deletes the temporary file.
-    console.log('cp3');
-
-    fs.createReadStream("../public/uploads/" + req.file.filename)
-      .on("end", function(){fs.unlink("../public/uploads/"+ req.file.filename, function(err){res.send("success")})})
-      .on("err", function(){res.send("Error uploading image")})
-          .pipe(writestream);
-    console.log('cp4');
-  });
-
-  // sends the image we saved by filename.
-  /*router.get("/:filename", function(req, res){
-      var readstream = gfs.createReadStream({filename: req.params.filename});
-      readstream.on("error", function(err){
-        res.send("No image found with that title");
-      });
-      readstream.pipe(res);
-  });
-
-  //delete the image
-  router.get("/delete/:filename", function(req, res){
-    gfs.exist({filename: req.params.filename}, function(err, found){
-      if(err) return res.send("Error occured");
-      if(found){
-        gfs.remove({filename: req.params.filename}, function(err){
-          if(err) return res.send("Error occured");
-          res.send("Image deleted!");
-        });
-      } else{
-        res.send("No image found with that title");
-      }
-    });
-  });*/
-});
-
-
 router.post('/fn_login',function(req,res){
     var email=req.body.email;
     var passwd=req.body.passwd;
@@ -170,6 +156,10 @@ router.post('/fn_login',function(req,res){
       }
     })
 })
+
+router.get('/pic', function(req, res, next) {
+  return './uploads';
+});
 
 router.get('/', function(req, res, next) {
   Post.find()
@@ -197,12 +187,6 @@ router.get('/post-image', function(req, res, next) {
   .then(function(doc){
   res.render('system/upload-image',{ title: 'Post' ,layout: 'dash.hbs',post:doc});
 });
-});
-
-router.post('/fileupload', multer({ dest: './uploads/'}).single('upl'), function(req,res){
-  console.log(req.body); //form fields
-  console.log(req.file); //form files
-  res.status(204).end();
 });
 
 router.get('/fileupload', function(req, res, next) {

@@ -1,20 +1,23 @@
 <div class="page-header">
-  <h2><i class="fa fa-upload"></i>File Upload</h2>
+  <h2><i class="fa fa-upload"></i>Update Profile Picture</h2>
 </div>
-<h3>File Upload Form</h3>
+<div class="form-group">
+  <label class="label label-warning" id="lbl">{{msg}}</label>
+</div>
 <div class="row">
-  <div class="col-sm-6">
-    <p>All files will be uploaded to "/uploads" directory.</p>
+  <div class="col-sm-3">
     <form role="form" enctype="multipart/form-data" method="POST" action='/fileupload'>
       <div class="form-group">
         <label class="control-label">File Input</label>
-        <input type="file" name="upl"/>
+        <input class="form-control" type="file" name="pic" required />
       </div>
-      <div class="form-group">
-        <label class="control-label">File Name</label>
-        <input type="text" name="title"/>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
+  <div class="col-sm-3">
+    <img src="./uploads/{{session._id}}" class="img img-responsive img-thumbnail">
+  </div>
 </div>
+<script type="text/javascript" language="javascript">
+    $("#lbl").delay(1000).fadeOut(100);
+</script>

@@ -4,7 +4,7 @@ var assert = require('assert');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var multer = require("multer");
-var upload =multer({dest: "../public/uploads"});
+var upload =multer({dest: "../uploads"});
 mongoose.connect('localhost:27017/proj')
 var conn = mongoose.connection;
 var passport = require('passport');
@@ -30,7 +30,7 @@ var Post=mongoose.model('postdata',postDataSchema);
 
 var storage =   multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, './public/uploads');
+    callback(null, './uploads');
   },
   filename: function (req, file, callback) {
     callback(null, req.session.user._id );

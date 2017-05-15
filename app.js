@@ -16,7 +16,7 @@ var index = require('./routes/index');
 const multer = require('multer');
 var app = express();
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const upload = multer({ dest: path.join(__dirname, '/public/uploads') });
 app.engine('hbs',hbs({extname:'hbs',defaultlayout:'layout',layoutsDir:__dirname+'/views/layouts'}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
